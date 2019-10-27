@@ -11,10 +11,7 @@ import javax.persistence.Persistence;
 
 import model.*;
 import services.*;
-/**
- *
- * @author Pepe
- */
+
 public class main {
 
     /**

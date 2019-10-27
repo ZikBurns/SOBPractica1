@@ -9,10 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import model.*;
 
-/**
- *
- * @author Pepe
- */
 public class RoomService {
     protected EntityManager em;
     

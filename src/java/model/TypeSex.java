@@ -5,10 +5,6 @@
  */
 package model;
 
-/**
- *
- * @author Pepe
- */
 public enum TypeSex {
     MAN, WOMAN, UNISEX
 }
