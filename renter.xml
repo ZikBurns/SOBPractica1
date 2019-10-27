@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<renter>
+    <id>1245</id>
+    <username>mine</username>
+    <password>craft</password>
+    <sex>WOMAN</sex>
+    <age>20</age>
+    <smoker>true</smoker>
+    <haspets>false</haspets>
+</renter>

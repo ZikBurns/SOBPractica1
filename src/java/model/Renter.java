@@ -26,6 +26,22 @@ public class Renter implements Serializable {
     private boolean smoker;
     private boolean haspets;
 
+    public Renter() {
+    }
+
+    public Renter(int id, String username, String password, TypeSex sex, int age, boolean smoker, boolean haspets) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.sex = sex;
+        this.age = age;
+        this.smoker = smoker;
+        this.haspets = haspets;
+    }
+
+    
+    
+    
     public String getUsername() {
         return username;
     }
@@ -82,6 +98,11 @@ public class Renter implements Serializable {
 
     public void setHaspets(boolean haspets) {
         this.haspets = haspets;
+    }
+
+   
+    public String toString() {
+        return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
     }
     
 }
