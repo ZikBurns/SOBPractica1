@@ -5,7 +5,9 @@
  */
 package services;
 
+import java.util.Collection;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import model.Renter;
 import model.TypeSex;
 
@@ -28,5 +30,48 @@ public class RenterService {
         em.persist(renter);
         return renter;
     }
+     
+    public Collection<Renter> queryAllRenters() {
+        return (Collection<Renter>) em.createQuery(
+                "SELECT r FROM Renter r").getResultList();
+    }
+    
+    public Renter queryRenterwithid(int id){
+        String query="SELECT r FROM Renter r WHERE r.id = :id";
+        try {
+        return (Renter) em.createQuery(query)
+                        .setParameter("id", id)
+                        .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    
+    public boolean updateRenter(int id,String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
+        Renter renter=queryRenterwithid(id);
+        if(renter!=null){
+            renter.setUsername(user);
+            renter.setPassword(pass);
+            renter.setSex(sex);
+            renter.setAge(age);
+            renter.setSmoker(smoker);
+            renter.setHaspets(haspets);
+            return true;
+        }
+        else return false;
+        
+    }
+    
+    public boolean deleteRenter(int id){
+        Renter renter=queryRenterwithid(id);
+        if(renter!=null){
+            em.remove(renter);
+            return true;
+        }
+        else return false;
+    }
+    
+    
+    
     
 }
