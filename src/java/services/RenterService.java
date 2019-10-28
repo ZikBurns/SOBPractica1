@@ -9,6 +9,7 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import model.Renter;
+import model.Room;
 import model.TypeSex;
 
 
@@ -66,6 +67,16 @@ public class RenterService {
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
             em.remove(renter);
+            return true;
+        }
+        else return false;
+    }
+    
+    public boolean assignRoomToRenter(int id,Room room)
+    {
+        Renter renter=queryRenterwithid(id);
+        if(renter!=null){
+            renter.setRoom(room);
             return true;
         }
         else return false;
