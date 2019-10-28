@@ -11,7 +11,7 @@ import model.*;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.eclipse.persistence.jaxb.UnmarshallerProperties;
 
-public class MarshallingTest {
+public class XmlJsonTest {
 
     public static void main(String[] args) throws JAXBException{
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
@@ -19,6 +19,7 @@ public class MarshallingTest {
         Renter renter = new Renter (1245,"mine","craft",TypeSex.WOMAN,20,true,false);
         File file;
         JAXBContext jaxbContext;
+        
         System.out.println("\n---- ROOM XML MARSHALLING TEST ----\n");
         file = new File("room.xml");
         jaxbContext = JAXBContext.newInstance(Room.class);
@@ -85,11 +86,12 @@ public class MarshallingTest {
         room = unmarshaller.unmarshal(json, Room.class).getValue();
         System.out.println(room);
         
+        
+        
         System.out.println("\n---- RENTER XML MARSHALLING TEST ----\n");
         file = new File("renter.xml");
         jaxbContext = JAXBContext.newInstance(Renter.class);
         jaxbMarshaller = jaxbContext.createMarshaller();
-        // output pretty printed
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.marshal(renter, file);
         jaxbMarshaller.marshal(renter, System.out);
