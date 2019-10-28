@@ -23,9 +23,9 @@ public class XmlJsonTest {
         System.out.println("Rent the room? (y/n)");
         String response = keyboard.next();
         if(response.equals("y"))renter.setRoom(room);
-        
         File file;
         JAXBContext jaxbContext;
+        
         
         System.out.println("\n---- ROOM XML MARSHALLING TEST ----\n");
         file = new File("room.xml");
@@ -35,7 +35,7 @@ public class XmlJsonTest {
         jaxbMarshaller.marshal(room, file);
         jaxbMarshaller.marshal(room, System.out);
 
-        
+       
         System.out.println("\n---- ROOM XML UNMARSHALLING TEST ----\n");
         file = new File("room.xml");
         jaxbContext = JAXBContext.newInstance(Room.class);
@@ -43,6 +43,7 @@ public class XmlJsonTest {
         room = (Room) jaxbUnmarshaller.unmarshal(file);
         System.out.println(room);
 
+        
         System.out.println("\n---- ROOM JSON MARSHALLING TEST ----\n");
         // Create a JaxBContext
         JAXBContext jc = JAXBContext.newInstance(Room.class);
@@ -94,7 +95,6 @@ public class XmlJsonTest {
         System.out.println(room);
         
         
-        
         System.out.println("\n---- RENTER XML MARSHALLING TEST ----\n");
         file = new File("renter.xml");
         jaxbContext = JAXBContext.newInstance(Renter.class);
@@ -103,12 +103,14 @@ public class XmlJsonTest {
         jaxbMarshaller.marshal(renter, file);
         jaxbMarshaller.marshal(renter, System.out);
         
+        
         System.out.println("\n---- RENTER XML UNMARSHALLING TEST ----\n");
         file = new File("renter.xml");
         jaxbContext = JAXBContext.newInstance(Renter.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         renter = (Renter) jaxbUnmarshaller.unmarshal(file);
         System.out.println(renter);
+        
         
         System.out.println("\n---- RENTER JSON MARSHALLING TEST ----\n");
         jc = JAXBContext.newInstance(Renter.class);
@@ -117,6 +119,7 @@ public class XmlJsonTest {
         marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(renter, System.out);
+        
         
         System.out.println("\n---- RENTER JSON UMARSHALLING TEST ----\n");
         jc = JAXBContext.newInstance(Renter.class);
@@ -170,9 +173,7 @@ public class XmlJsonTest {
             "      \"haspets\" : false\n" +
             "   }\n" +
             "}"
-            ));
-            
-            
+            ));   
         }
         // Getting the employee pojo again from the json
         renter = unmarshaller.unmarshal(json, Renter.class).getValue();
