@@ -10,11 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-@XmlType(propOrder = {"id","username","password","sex","age","smoker","haspets"})
+@XmlType(propOrder = {"id","username","password","sex","age","smoker","haspets","room"})
 @Entity
 public class Renter implements Serializable {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -26,6 +28,11 @@ public class Renter implements Serializable {
     private boolean smoker;
     private boolean haspets;
 
+    @OneToOne 
+    @JoinColumn(name="ROOM_ID") 
+    private Room room;
+    
+    
     public Renter() {
     }
 
@@ -37,6 +44,14 @@ public class Renter implements Serializable {
         this.age = age;
         this.smoker = smoker;
         this.haspets = haspets;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     
@@ -100,9 +115,13 @@ public class Renter implements Serializable {
         this.haspets = haspets;
     }
 
-   
+    @Override
     public String toString() {
-        return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
+        if(room==null) return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
+        else return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
     }
+
+   
+    
     
 }

@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
@@ -28,6 +29,9 @@ public class Room implements Serializable {
     @Embedded 
     private Requeriments req;
 
+    @OneToOne(mappedBy="room")
+    private Renter renter;
+    
     public Room(int id, String description, String address, String city, TypeDimension dimension, TypeLocation location, boolean furniture, double price, Requeriments req) {
         this.id = id;
         this.description = description;
@@ -43,7 +47,14 @@ public class Room implements Serializable {
     public Room() {
     }
 
+    public Renter getRenter() {
+        return renter;
+    }
     
+    @XmlTransient
+    public void setRenter(Renter renter) {
+        this.renter = renter;
+    }
     
     public int getId() {
         return id;
