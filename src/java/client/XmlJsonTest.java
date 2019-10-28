@@ -2,6 +2,7 @@ package client;
 
 import java.io.File;
 import java.io.StringReader;
+import java.util.Scanner;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -17,7 +18,12 @@ public class XmlJsonTest {
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
         Room room = new Room(123,"Casa bonica","Sant Antoni N7","Barcelona",TypeDimension.SIMPLE,TypeLocation.INTERIOR,true, 13.22,new Requeriments(TypeSex.MAN,90,18,false, false));
         Renter renter = new Renter (1245,"mine","craft",TypeSex.WOMAN,20,true,false);
-        renter.setRoom(room);
+        System.out.println("The system has\n"+room+"\n"+renter);
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Rent the room? (y/n)");
+        String response = keyboard.next();
+        if(response.equals("y"))renter.setRoom(room);
+        
         File file;
         JAXBContext jaxbContext;
         
@@ -117,36 +123,57 @@ public class XmlJsonTest {
         unmarshaller = jc.createUnmarshaller();
         unmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE,"application/json");
         unmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, true);
-        json = new StreamSource(new StringReader(
-        "{\n" +
-        "   \"renter\" : {\n" +
-        "      \"id\" : 1245,\n" +
-        "      \"username\" : \"mine\",\n" +
-        "      \"password\" : \"craft\",\n" +
-        "      \"sex\" : \"WOMAN\",\n" +
-        "      \"age\" : 20,\n" +
-        "      \"smoker\" : true,\n" +
-        "      \"haspets\" : false,\n" +
-        "      \"room\" : {\n" +
-        "         \"id\" : 123,\n" +
-        "         \"address\" : \"Sant Antoni N7\",\n" +
-        "         \"city\" : \"Barcelona\",\n" +
-        "         \"description\" : \"Casa bonica\",\n" +
-        "         \"dimension\" : \"SIMPLE\",\n" +
-        "         \"furniture\" : true,\n" +
-        "         \"location\" : \"INTERIOR\",\n" +
-        "         \"price\" : 13.22,\n" +
-        "         \"req\" : {\n" +
-        "            \"maxage\" : 90,\n" +
-        "            \"minage\" : 18,\n" +
-        "            \"pets\" : false,\n" +
-        "            \"sex\" : \"MAN\",\n" +
-        "            \"smokers\" : false\n" +
-        "         }\n" +
-        "      }\n" +
-        "   }\n" +
-        "}"
-        ));
+        if(response.equals("y"))
+        {
+            json = new StreamSource(new StringReader(
+            "{\n" +
+            "   \"renter\" : {\n" +
+            "      \"id\" : 1245,\n" +
+            "      \"username\" : \"mine\",\n" +
+            "      \"password\" : \"craft\",\n" +
+            "      \"sex\" : \"WOMAN\",\n" +
+            "      \"age\" : 20,\n" +
+            "      \"smoker\" : true,\n" +
+            "      \"haspets\" : false,\n" +
+            "      \"room\" : {\n" +
+            "         \"id\" : 123,\n" +
+            "         \"address\" : \"Sant Antoni N7\",\n" +
+            "         \"city\" : \"Barcelona\",\n" +
+            "         \"description\" : \"Casa bonica\",\n" +
+            "         \"dimension\" : \"SIMPLE\",\n" +
+            "         \"furniture\" : true,\n" +
+            "         \"location\" : \"INTERIOR\",\n" +
+            "         \"price\" : 13.22,\n" +
+            "         \"req\" : {\n" +
+            "            \"maxage\" : 90,\n" +
+            "            \"minage\" : 18,\n" +
+            "            \"pets\" : false,\n" +
+            "            \"sex\" : \"MAN\",\n" +
+            "            \"smokers\" : false\n" +
+            "         }\n" +
+            "      }\n" +
+            "   }\n" +
+            "}"
+            ));
+        }
+        else
+        {
+             json = new StreamSource(new StringReader(
+            "{\n" +
+            "   \"renter\" : {\n" +
+            "      \"id\" : 1245,\n" +
+            "      \"username\" : \"mine\",\n" +
+            "      \"password\" : \"craft\",\n" +
+            "      \"sex\" : \"WOMAN\",\n" +
+            "      \"age\" : 20,\n" +
+            "      \"smoker\" : true,\n" +
+            "      \"haspets\" : false\n" +
+            "   }\n" +
+            "}"
+            ));
+            
+            
+        }
         // Getting the employee pojo again from the json
         renter = unmarshaller.unmarshal(json, Renter.class).getValue();
         System.out.println(renter);

@@ -117,7 +117,7 @@ public class Renter implements Serializable {
 
     @Override
     public String toString() {
-        if(room==null) return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
+        if(room==null) return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
         else return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
     }
 
