@@ -31,22 +31,26 @@ public class DataBaseTest {
         em.getTransaction().begin();
         Renter renter = renterservice.createRenter("Norberta", "12345", TypeSex.UNISEX,48, false, false);
         em.getTransaction().commit();
-        System.out.println("Created  " + renter);
+        System.out.println("--- Created  " + renter);
         
         em.getTransaction().begin();
         Room room = roomservice.createRoomandRequirements("Habitació tranquila a les afores de sant pere i sant pau", "Carrer Gall d'hindi Nº3", "Tarragona", TypeDimension.SIMPLE, TypeLocation.INTERIOR, true, 90.67, TypeSex.UNISEX, 18, 70, false, false);
         em.getTransaction().commit();
-        System.out.println("Created  " + room);
+        System.out.println("--- Created  " + room);
         
-        /*INSERT QUERIES, DELETES AND UPDATES*/
-        /*INSERT QUERIES, DELETES AND UPDATES*/
-        /*INSERT QUERIES, DELETES AND UPDATES*/
-        /*INSERT QUERIES, DELETES AND UPDATES*/
-        /*INSERT QUERIES, DELETES AND UPDATES*/
-        /*INSERT QUERIES, DELETES AND UPDATES*/
+        /*INSERT QUERIES, DELETES AND UPDATES FOR ROOMS*/
         
         
-        
+        System.out.println("--- General query\n"+renterservice.queryAllRenters());
+        System.out.println("--- Ask for id=2 \n"+renterservice.queryRenterwithid(2));
+        System.out.println("--- Renter with Id=2 uses a better password\n"+renterservice.updateRenter(2, "Joan", "D24sGsJtE7", TypeSex.MAN, 0, false, true));
+        System.out.println("--- Ask for id=2 \n"+renterservice.queryRenterwithid(2));
+        System.out.println("--- Ask for id=3 \n"+renterservice.queryRenterwithid(3));
+        System.out.println("--- Renter with Id=3 has a room assigned\n"+renterservice.assignRoomToRenter(3, room));
+        System.out.println("--- Ask for id=3 \n"+renterservice.queryRenterwithid(3));
+        System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
+        System.out.println("--- Delete id=1 \n"+renterservice.deleteRenter(1));
+        System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
         em.close();
         emf.close();
     }
