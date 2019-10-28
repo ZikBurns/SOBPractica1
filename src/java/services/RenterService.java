@@ -8,11 +8,12 @@ package services;
 import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.ws.rs.Path;
 import model.Renter;
 import model.Room;
 import model.TypeSex;
 
-
+@Path("/tenant")
 public class RenterService {
     protected EntityManager em;
     

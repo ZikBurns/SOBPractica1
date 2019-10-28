@@ -7,8 +7,10 @@ package services;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.ws.rs.Path;
 import model.*;
 
+@Path("/books")
 public class RoomService {
     protected EntityManager em;
     
