@@ -44,12 +44,10 @@ public class DataBaseTest {
         System.out.println("--- General query\n"+renterservice.queryAllRenters());
         System.out.println("--- Ask for id=2 \n"+renterservice.queryRenterwithid(2));
         System.out.println("--- Renter with Id=2 uses a better password\n"+renterservice.updateRenter(2, "Joan", "D24sGsJtE7", TypeSex.MAN, 0, false, true));
-        System.out.println("--- Ask for id=2 \n"+renterservice.queryRenterwithid(2));
         System.out.println("--- Ask for id=3 \n"+renterservice.queryRenterwithid(3));
         System.out.println("--- Renter with Id=3 has a room assigned\n"+renterservice.assignRoomToRenter(3, room));
-        System.out.println("--- Ask for id=3 \n"+renterservice.queryRenterwithid(3));
         System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
-        System.out.println("--- Delete id=1 \n"+renterservice.deleteRenter(1));
+        System.out.println("--- Delete id=1 \n"+renterservice.deleteRenterDB(1));
         System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
         em.close();
         emf.close();

@@ -6,11 +6,26 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Service</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+        <h1>Create new renter</h1>
+        <form action="rest/api/v1/tenant" method="POST">
+            <input type="text" name="jsonstring" />
+            <input type="submit" value="Send!" />
+        </form>
+        <h1>Update renter</h1>
+        <form action="rest/api/v1/tenant/${id}" method="POST">
+            <input type="text" name="jsonstring" />
+            <input type="submit" value="Send!" />
+        </form>
+        <h1>Rent a room</h1>
+        <form action="rest/api/v1/tenant/${id}/rent" method="POST">
+            <input type="text" name="jsonstring" />
+            <input type="submit" value="Send!" />
+        </form>
+        
     </body>
 </html>
