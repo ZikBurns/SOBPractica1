@@ -37,7 +37,7 @@ public class RenterService {
         this.em=em;
     }
     
-    private Renter transformjsonRenter(String jsonstring) throws JAXBException
+    private Renter unmarshalljsonRenter(String jsonstring) throws JAXBException
     {
         JAXBContext jc = JAXBContext.newInstance(Renter.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -47,7 +47,7 @@ public class RenterService {
         return unmarshaller.unmarshal(json, Renter.class).getValue();
     }
     
-    private Room transformjsonRoom(String jsonstring) throws JAXBException
+    private Room unmarshalljsonRoom(String jsonstring) throws JAXBException
     {
         JAXBContext jc = JAXBContext.newInstance(Room.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -62,7 +62,7 @@ public class RenterService {
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postRenter(String jsonstring) throws JAXBException
     {
-        Renter renter = this.transformjsonRenter(jsonstring);
+        Renter renter = this.unmarshalljsonRenter(jsonstring);
         return Response.ok().entity(renter).build();
     }
     
@@ -115,7 +115,7 @@ public class RenterService {
     @Consumes(MediaType.TEXT_PLAIN)
     public Response putUpdateRenter(@PathParam("id") int id, String jsonstring) throws JAXBException
     {
-        Renter renter = this.transformjsonRenter(jsonstring);
+        Renter renter = this.unmarshalljsonRenter(jsonstring);
         renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
         return Response.ok().entity(renter).build();
     }
@@ -156,7 +156,7 @@ public class RenterService {
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postRenterRoom(@PathParam("id") int id,String jsonstring) throws JAXBException
     {
-        Room room = this.transformjsonRoom(jsonstring);
+        Room room = this.unmarshalljsonRoom(jsonstring);
         return Response.ok().entity(this.assignRoomToRenter(id,room)).build();
     }
     

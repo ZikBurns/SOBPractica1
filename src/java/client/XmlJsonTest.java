@@ -2,6 +2,8 @@ package client;
 
 import java.io.File;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Scanner;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13,7 +15,8 @@ import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.eclipse.persistence.jaxb.UnmarshallerProperties;
 
 public class XmlJsonTest {
-
+    
+    
     public static void main(String[] args) throws JAXBException{
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
         Room room = new Room(123,"Casa bonica","Sant Antoni N7","Barcelona",TypeDimension.SIMPLE,TypeLocation.INTERIOR,true, 13.22,new Requeriments(TypeSex.MAN,90,18,false, false));
@@ -45,28 +48,21 @@ public class XmlJsonTest {
 
         
         System.out.println("\n---- ROOM JSON MARSHALLING TEST ----\n");
-        // Create a JaxBContext
         JAXBContext jc = JAXBContext.newInstance(Room.class);
-        // Create the Marshaller Object using the JaxB Context
         Marshaller marshaller = jc.createMarshaller();
         // Set the Marshaller media type to JSON or XML
         marshaller.setProperty(MarshallerProperties.MEDIA_TYPE,"application/json");
-        // Set it to true if you need to include the JSON root element in the JSON output
         marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
-        // Set it to true if you need the JSON output to formatted
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        // Marshal the employee object to JSON and print the output to console
-        marshaller.marshal(room, System.out);
-        
+        Writer sw = new StringWriter();
+        marshaller.marshal(room, sw);
+        System.out.println(sw.toString()); 
         
         System.out.println("\n---- ROOM JSON UNMARSHALLING TEST ----\n");
-        // Create a JaxBContext
         jc = JAXBContext.newInstance(Room.class);
-        // Create the Unmarshaller Object using the JaxB Context
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         // Set the Unmarshaller media type to JSON or XML
         unmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE,"application/json");
-        // Set it to true if you need to include the JSON root element in the JSON input
         unmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, true);
         // Create the StreamSource by creating StringReader using the JSON input
         StreamSource json = new StreamSource(new StringReader(
@@ -90,7 +86,6 @@ public class XmlJsonTest {
         "   }\n" +
         "}"
         ));
-        // Getting the employee pojo again from the json
         room = unmarshaller.unmarshal(json, Room.class).getValue();
         System.out.println(room);
         
