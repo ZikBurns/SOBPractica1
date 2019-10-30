@@ -20,12 +20,12 @@ public class XmlJsonTest {
     public static void main(String[] args) throws JAXBException{
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
         Room room = new Room(123,"Casa bonica","Sant Antoni N7","Barcelona",TypeDimension.SIMPLE,TypeLocation.INTERIOR,true, 13.22,new Requeriments(TypeSex.MAN,90,18,false, false));
-        Tenant tenant = new Tenant (1245,"mine","craft",TypeSex.WOMAN,20,true,false);
-        System.out.println("The system has\n"+room+"\n"+tenant);
+        Renter renter = new Renter (1245,"mine","craft",TypeSex.WOMAN,20,true,false);
+        System.out.println("The system has\n"+room+"\n"+renter);
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Rent the room? (y/n)");
         String response = keyboard.next();
-        if(response.equals("y"))tenant.setRoom(room);
+        if(response.equals("y"))renter.setRoom(room);
         File file;
         JAXBContext jaxbContext;
         
@@ -91,33 +91,33 @@ public class XmlJsonTest {
         
         
         System.out.println("\n---- RENTER XML MARSHALLING TEST ----\n");
-        file = new File("tenant.xml");
-        jaxbContext = JAXBContext.newInstance(Tenant.class);
+        file = new File("renter.xml");
+        jaxbContext = JAXBContext.newInstance(Renter.class);
         jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        jaxbMarshaller.marshal(tenant, file);
-        jaxbMarshaller.marshal(tenant, System.out);
+        jaxbMarshaller.marshal(renter, file);
+        jaxbMarshaller.marshal(renter, System.out);
         
         
         System.out.println("\n---- RENTER XML UNMARSHALLING TEST ----\n");
-        file = new File("tenant.xml");
-        jaxbContext = JAXBContext.newInstance(Tenant.class);
+        file = new File("renter.xml");
+        jaxbContext = JAXBContext.newInstance(Renter.class);
         jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        tenant = (Tenant) jaxbUnmarshaller.unmarshal(file);
-        System.out.println(tenant);
+        renter = (Renter) jaxbUnmarshaller.unmarshal(file);
+        System.out.println(renter);
         
         
         System.out.println("\n---- RENTER JSON MARSHALLING TEST ----\n");
-        jc = JAXBContext.newInstance(Tenant.class);
+        jc = JAXBContext.newInstance(Renter.class);
         marshaller = jc.createMarshaller();
         marshaller.setProperty(MarshallerProperties.MEDIA_TYPE,"application/json");
         marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(tenant, System.out);
+        marshaller.marshal(renter, System.out);
         
         
         System.out.println("\n---- RENTER JSON UMARSHALLING TEST ----\n");
-        jc = JAXBContext.newInstance(Tenant.class);
+        jc = JAXBContext.newInstance(Renter.class);
         unmarshaller = jc.createUnmarshaller();
         unmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE,"application/json");
         unmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, true);
@@ -125,7 +125,7 @@ public class XmlJsonTest {
         {
             json = new StreamSource(new StringReader(
             "{\n" +
-            "   \"tenant\" : {\n" +
+            "   \"renter\" : {\n" +
             "      \"id\" : 1245,\n" +
             "      \"username\" : \"mine\",\n" +
             "      \"password\" : \"craft\",\n" +
@@ -158,7 +158,7 @@ public class XmlJsonTest {
         {
              json = new StreamSource(new StringReader(
             "{\n" +
-            "   \"tenant\" : {\n" +
+            "   \"renter\" : {\n" +
             "      \"id\" : 1245,\n" +
             "      \"username\" : \"mine\",\n" +
             "      \"password\" : \"craft\",\n" +
@@ -171,8 +171,8 @@ public class XmlJsonTest {
             ));   
         }
         // Getting the employee pojo again from the json
-        tenant = unmarshaller.unmarshal(json, Tenant.class).getValue();
-        System.out.println(tenant);
+        renter = unmarshaller.unmarshal(json, Renter.class).getValue();
+        System.out.println(renter);
         
     }
 }
