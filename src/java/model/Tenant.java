@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlType(propOrder = {"id","username","password","sex","age","smoker","haspets","room"})
 @Entity
-public class Renter implements Serializable {
+public class Tenant implements Serializable {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private String username;
@@ -33,10 +33,10 @@ public class Renter implements Serializable {
     private Room room;
     
     
-    public Renter() {
+    public Tenant() {
     }
 
-    public Renter(int id, String username, String password, TypeSex sex, int age, boolean smoker, boolean haspets) {
+    public Tenant(int id, String username, String password, TypeSex sex, int age, boolean smoker, boolean haspets) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -117,8 +117,8 @@ public class Renter implements Serializable {
 
     @Override
     public String toString() {
-        if(room==null) return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
-        else return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
+        if(room==null) return "Tenant{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
+        else return "Tenant{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
     }
 
    

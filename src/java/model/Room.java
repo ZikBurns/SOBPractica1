@@ -30,7 +30,7 @@ public class Room implements Serializable {
     private Requeriments req;
 
     @OneToOne(mappedBy="room")
-    private Renter renter;
+    private Tenant tenant;
     
     public Room(int id, String description, String address, String city, TypeDimension dimension, TypeLocation location, boolean furniture, double price, Requeriments req) {
         this.id = id;
@@ -47,13 +47,13 @@ public class Room implements Serializable {
     public Room() {
     }
 
-    public Renter getRenter() {
-        return renter;
+    public Tenant getTenant() {
+        return tenant;
     }
     
     @XmlTransient
-    public void setRenter(Renter renter) {
-        this.renter = renter;
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
     
     public int getId() {
