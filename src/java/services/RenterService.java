@@ -37,32 +37,11 @@ public class RenterService {
         this.em=em;
     }
     
-    private Renter unmarshalljsonRenter(String jsonstring) throws JAXBException
-    {
-        JAXBContext jc = JAXBContext.newInstance(Renter.class);
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        unmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE,"application/json");
-        unmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, true);
-        StreamSource json = new StreamSource(new StringReader(jsonstring));
-        return unmarshaller.unmarshal(json, Renter.class).getValue();
-    }
-    
-    private Room unmarshalljsonRoom(String jsonstring) throws JAXBException
-    {
-        JAXBContext jc = JAXBContext.newInstance(Room.class);
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        unmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE,"application/json");
-        unmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, true);
-        StreamSource json = new StreamSource(new StringReader(jsonstring));
-        return unmarshaller.unmarshal(json, Room.class).getValue();
-    }
-    
-    
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response postRenter(String jsonstring) throws JAXBException
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postRenter(Renter renter) throws JAXBException
     {
-        Renter renter = this.unmarshalljsonRenter(jsonstring);
+        renter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         return Response.ok().entity(renter).build();
     }
     
@@ -94,8 +73,9 @@ public class RenterService {
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getRenterwithid(@PathParam("id") int id){
-        return Response.ok().entity(this.queryRenterwithid(id)).build();
-        //What to do if response is null?? Ask the teacher
+        Renter renter = this.queryRenterwithid(id);
+        if (renter==null) return Response.noContent().build();
+        else return Response.ok().entity(renter).build();
     }
     
     public Renter queryRenterwithid(int id){
@@ -112,10 +92,9 @@ public class RenterService {
     /*TODO UpdateRenter as a PUT*/
     @PUT    
     @Path("{id}")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response putUpdateRenter(@PathParam("id") int id, String jsonstring) throws JAXBException
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response putUpdateRenter(@PathParam("id") int id, Renter renter) throws JAXBException
     {
-        Renter renter = this.unmarshalljsonRenter(jsonstring);
         renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
         return Response.ok().entity(renter).build();
     }
@@ -153,11 +132,12 @@ public class RenterService {
     
     @POST
     @Path("{id}/rent")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response postRenterRoom(@PathParam("id") int id,String jsonstring) throws JAXBException
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postRenterRoom(@PathParam("id") int id,Room room) throws JAXBException
     {
-        Room room = this.unmarshalljsonRoom(jsonstring);
-        return Response.ok().entity(this.assignRoomToRenter(id,room)).build();
+        Renter renter=this.assignRoomToRenter(id,room);
+        if (renter==null) return Response.noContent().build();
+        else return Response.ok().entity(renter).build();
     }
     
     public Renter assignRoomToRenter(int id,Room room)
