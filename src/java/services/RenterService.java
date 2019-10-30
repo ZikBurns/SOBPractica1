@@ -96,7 +96,8 @@ public class RenterService {
     public Response putUpdateRenter(@PathParam("id") int id, Renter renter) throws JAXBException
     {
         renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
-        return Response.ok().entity(renter).build();
+        if (renter==null) return Response.noContent().build();
+        else return Response.ok().entity(renter).build();
     }
     
     public Renter updateRenter(int id,String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
@@ -118,7 +119,9 @@ public class RenterService {
     @Path("{id}")
     public Response deleteRenter(@PathParam("id") int id)
     {
-        return Response.ok().entity(this.deleteRenterDB(id)).build();
+        Renter renter =this.deleteRenterDB(id);
+        if (renter==null) return Response.noContent().build();
+        else return Response.ok().entity(renter).build();
     }
     
     public Renter deleteRenterDB(int id){
