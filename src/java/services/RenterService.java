@@ -19,6 +19,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
@@ -39,7 +40,8 @@ public class RenterService {
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response postRenter(Renter renter) throws JAXBException
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postRenter(@FormParam("renter") Renter renter) 
     {
         renter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         return Response.ok().entity(renter).build();
@@ -71,7 +73,7 @@ public class RenterService {
     
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getRenterwithid(@PathParam("id") int id){
         Renter renter = this.queryRenterwithid(id);
         if (renter==null) return Response.noContent().build();
@@ -93,7 +95,8 @@ public class RenterService {
     @PUT    
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response putUpdateRenter(@PathParam("id") int id, Renter renter) throws JAXBException
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putUpdateRenter(@PathParam("id") int id, Renter renter)
     {
         renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
         if (renter==null) return Response.noContent().build();
@@ -117,6 +120,7 @@ public class RenterService {
     
     @DELETE    
     @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteRenter(@PathParam("id") int id)
     {
         Renter renter =this.deleteRenterDB(id);
@@ -136,7 +140,8 @@ public class RenterService {
     @POST
     @Path("{id}/rent")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response postRenterRoom(@PathParam("id") int id,Room room) throws JAXBException
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postRenterRoom(@PathParam("id") int id,@FormParam("room") Room room) 
     {
         Renter renter=this.assignRoomToRenter(id,room);
         if (renter==null) return Response.noContent().build();
