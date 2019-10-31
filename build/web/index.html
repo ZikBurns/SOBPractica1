@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Service</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Create new renter</h1>
+        <form action="rest/api/v1/tenant" method="POST">
+            <input type="text" name="renter" />
+            <input type="submit" value="Send!" />
+        </form>
+        <h1>Rent a room</h1>
+        <form action="rest/api/v1/tenant/${id}/rent" method="POST">
+            <input type="text" name="room" />
+            <input type="submit" value="Send!" />
+        </form>
+        
+    </body>
+</html>
