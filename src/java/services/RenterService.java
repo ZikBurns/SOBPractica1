@@ -130,7 +130,9 @@ public class RenterService {
     public Renter deleteRenterDB(int id){
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
+            em.getTransaction().begin();
             em.remove(renter);
+            em.getTransaction().commit();
             return renter;
         }
         else return null;
