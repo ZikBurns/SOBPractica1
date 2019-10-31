@@ -28,7 +28,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
-import org.eclipse.persistence.jaxb.UnmarshallerProperties;
 
 @Path("/tenant")
 public class RenterService {
