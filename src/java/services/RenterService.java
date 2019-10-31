@@ -6,6 +6,8 @@
 package services;
 
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -25,9 +27,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.PropertyException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.bind.Marshaller;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+
 
 @Path("/tenant")
 public class RenterService {
@@ -37,6 +39,18 @@ public class RenterService {
         this.em=em;
     }
     
+    
+    public String marshallJson(Renter renter) throws JAXBException{
+        JAXBContext jc = JAXBContext.newInstance(Renter.class);
+        Marshaller marshaller = jc.createMarshaller();
+        marshaller.setProperty(MarshallerProperties.MEDIA_TYPE,"application/json");
+        marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        Writer sw = new StringWriter();
+        marshaller.marshal(renter, sw);
+        return(sw.toString()); 
+    }
+   
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,10 +87,14 @@ public class RenterService {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRenterwithid(@PathParam("id") int id){
+    public Response getRenterwithid(@PathParam("id") int id) throws JAXBException{
         Renter renter = this.queryRenterwithid(id);
         if (renter==null) return Response.noContent().build();
-        else return Response.ok().entity(renter).build();
+        else
+        {
+            String json=this.marshallJson(renter);
+            return Response.ok().entity(json).build();
+        }
     }
     
     public Renter queryRenterwithid(int id){
