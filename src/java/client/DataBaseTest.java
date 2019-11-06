@@ -23,7 +23,7 @@ import services.RoomService;
 public class DataBaseTest {
     public static void main(String[] args) {
         EntityManagerFactory emf = 
-                Persistence.createEntityManagerFactory("RoomService");
+                Persistence.createEntityManagerFactory("Service");
         EntityManager em = emf.createEntityManager();
         RoomService roomservice=new RoomService(em);
         RenterService renterservice = new RenterService(em);

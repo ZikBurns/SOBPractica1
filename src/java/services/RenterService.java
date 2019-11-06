@@ -9,8 +9,11 @@ package services;
 import java.io.StringReader;
 
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -24,6 +27,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -38,6 +42,12 @@ import org.eclipse.persistence.jaxb.MarshallerProperties;
 @Path("/tenant")
 public class RenterService {
     protected EntityManager em;
+
+    public RenterService() {
+        em = Persistence.createEntityManagerFactory("Service")
+                        .createEntityManager();
+    }
+    
     
     public RenterService(EntityManager em){
         this.em=em;
@@ -48,7 +58,7 @@ public class RenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postRenter(@FormParam("renter") Renter renter) 
     {
-        Collection<Renter> renters = this.queryAllRenters();
+        List<Renter> renters = this.queryAllRenters();
         if(renters.isEmpty()) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
         renter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         return Response.ok().entity(renter).build();
@@ -70,11 +80,12 @@ public class RenterService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getjsonAllRenters(){
-         return Response.ok().entity(this.queryAllRenters()).build();
+        GenericEntity<List<Renter>> entity = new GenericEntity<List<Renter>>(queryAllRenters()) {};
+         return Response.ok(entity).build();
     }
      
-    public Collection<Renter> queryAllRenters() {
-        return (Collection<Renter>) em.createQuery(
+    public List<Renter> queryAllRenters() {
+        return (List<Renter>) em.createQuery(
                 "SELECT r FROM Renter r").getResultList();
     }
     
@@ -131,7 +142,7 @@ public class RenterService {
     public Response deleteRenter(@PathParam("id") int id)
     {
         Renter renter =this.deleteRenterDB(id);
-        if (renter==null) return Response.noContent().build();
+        if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
         else return Response.ok().entity(renter).build();
     }
     
