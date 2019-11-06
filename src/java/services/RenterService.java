@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -39,23 +40,13 @@ public class RenterService {
         this.em=em;
     }
     
-    
-    public String marshallJson(Renter renter) throws JAXBException{
-        JAXBContext jc = JAXBContext.newInstance(Renter.class);
-        Marshaller marshaller = jc.createMarshaller();
-        marshaller.setProperty(MarshallerProperties.MEDIA_TYPE,"application/json");
-        marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        Writer sw = new StringWriter();
-        marshaller.marshal(renter, sw);
-        return(sw.toString()); 
-    }
-   
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postRenter(@FormParam("renter") Renter renter) 
     {
+        Collection<Renter> renters = this.queryAllRenters();
+        if(renters.isEmpty()) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
         renter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         return Response.ok().entity(renter).build();
     }
@@ -89,12 +80,9 @@ public class RenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRenterwithid(@PathParam("id") int id) throws JAXBException{
         Renter renter = this.queryRenterwithid(id);
-        if (renter==null) return Response.noContent().build();
-        else
-        {
-            String json=this.marshallJson(renter);
-            return Response.ok().entity(json).build();
-        }
+        if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
+        return Response.ok().entity(renter).build();
+
     }
     
     public Renter queryRenterwithid(int id){
