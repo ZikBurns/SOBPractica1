@@ -76,7 +76,7 @@ public class UserClient {
 
     public Response postRenter(Renter renter){
         WebTarget resource = client.target(BASE_URI).path("tenant");
-        return resource.request().post(Entity.entity(renter, MediaType.APPLICATION_JSON), Response.class);
+        return resource.request(MediaType.APPLICATION_JSON).post(Entity.entity(renter, MediaType.APPLICATION_JSON), Response.class);
     }
     
     public Response putUpdateRenter(Renter renter) 
@@ -106,8 +106,8 @@ public class UserClient {
         System.out.println("Response get: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
         Renter renter=new Renter(10,"josepmaria","catorze",TypeSex.MAN,46,true,true);
-//        response = client.postRenter(renter);
-//        System.out.println("Response post: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
+        response = client.postRenter(renter);
+        System.out.println("Response post: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
         renter=new Renter(10,"josepmaria","quinze",TypeSex.MAN,46,true,true);
 //        response = client.putUpdateRenter(renter);
@@ -120,9 +120,9 @@ public class UserClient {
 //        response = client.postRenterRoom(3, room);
 //        System.out.println("Response delete: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
-        //respons = client.getRenters();
-                //System.out.println("Response get: \n" + response.readEntity(Collection.class) + "\n  Status: " + response.getStatus());
-
+        response = client.getRenters();
+        System.out.println("Response get: \n" + response.readEntity(String.class) + "\n  Status: " + response.getStatus());
+        
     }
     
 }
