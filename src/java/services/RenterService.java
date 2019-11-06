@@ -159,6 +159,7 @@ public class RenterService {
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
             renter.setRoom(room);
+            room.setRenter(renter);
             return renter;
         }
         else return null;
