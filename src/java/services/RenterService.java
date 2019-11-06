@@ -56,7 +56,7 @@ public class RenterService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postRenter(@FormParam("renter") Renter renter) 
+    public Response postRenter(Renter renter) 
     {
         List<Renter> renters = this.queryAllRenters();
         if(renters.isEmpty()) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
@@ -65,7 +65,10 @@ public class RenterService {
     }
     
      public Renter createRenter(String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
+        List<Renter> list = queryAllRenters();
+        Renter last = list.get(list.size()-1);
         Renter renter = new Renter();
+        renter.setId(last.getId()+1);
         renter.setUsername(user);
         renter.setPassword(pass);
         renter.setSex(sex);
