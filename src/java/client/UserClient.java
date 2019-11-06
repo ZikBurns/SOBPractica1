@@ -21,7 +21,10 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import model.Renter;
+import model.Requeriments;
 import model.Room;
+import model.TypeDimension;
+import model.TypeLocation;
 import model.TypeSex;
 
 /**
@@ -110,15 +113,15 @@ public class UserClient {
         System.out.println("Response post: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
         renter=new Renter(10,"josepmaria","quinze",TypeSex.MAN,46,true,true);
-//        response = client.putUpdateRenter(renter);
-//        System.out.println("Response update: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
+        response = client.putUpdateRenter(renter);
+        System.out.println("Response update: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
         response = client.deleteRenter(2);
         System.out.println("Response delete: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
-        Room room=new Room();
-//        response = client.postRenterRoom(3, room);
-//        System.out.println("Response delete: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
+        Room room = new Room(123,"Casa bonica","Sant Antoni N7","Barcelona",TypeDimension.SIMPLE,TypeLocation.INTERIOR,true, 13.22,new Requeriments("JosepCastanyes@gmail.com",988264432,TypeSex.MAN,90,18,false, false));
+        response = client.postRenterRoom(1, room);
+        System.out.println("Response delete: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
         response = client.getRenters();
         System.out.println("Response get: \n" + response.readEntity(String.class) + "\n  Status: " + response.getStatus());

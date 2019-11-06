@@ -58,8 +58,8 @@ public class RenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postRenter(Renter renter) 
     {
-        List<Renter> renters = this.queryAllRenters();
-        if(renters.isEmpty()) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
+        //List<Renter> renters = this.queryAllRenters();
+        //if(renters.getx) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
         renter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         return Response.ok().entity(renter).build();
     }
@@ -164,10 +164,10 @@ public class RenterService {
     @Path("{id}/rent")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postRenterRoom(@PathParam("id") int id,@FormParam("room") Room room) 
+    public Response postRenterRoom(@PathParam("id") int id, Room room) 
     {
         Renter renter=this.assignRoomToRenter(id,room);
-        if (renter==null) return Response.noContent().build();
+        if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
         else return Response.ok().entity(renter).build();
     }
     
