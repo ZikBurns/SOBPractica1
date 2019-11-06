@@ -47,8 +47,8 @@ public class DataBaseTest {
         System.out.println("--- Ask for id=3 \n"+renterservice.queryRenterwithid(3));
         System.out.println("--- Renter with Id=3 has a room assigned\n"+renterservice.assignRoomToRenter(3, room));
         System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
-        System.out.println("--- Delete id=1 \n"+renterservice.deleteRenterDB(3));
-        System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(3));
+        System.out.println("--- Delete id=1 \n"+renterservice.deleteRenterDB(1));
+        System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
         em.close();
         emf.close();
     }

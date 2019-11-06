@@ -101,7 +101,7 @@ public class UserClient {
         System.out.println("Response get: \n" + response.readEntity(Collection.class) + "\n  Status: " + response.getStatus());
         
         response = client.getRenter(2);
-        System.out.println("Response get: \n" + response.readEntity(String.class) + "\n  Status: " + response.getStatus());
+        System.out.println("Response get: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
         Renter renter=new Renter(10,"josepmaria","catorze",TypeSex.MAN,46,true,true);
         response = client.postRenter(renter);

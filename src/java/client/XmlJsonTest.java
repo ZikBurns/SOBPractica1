@@ -78,7 +78,9 @@ public class XmlJsonTest {
         "      \"price\" : 13.22,\n" +
         "      \"req\" : {\n" +
         "         \"maxage\" : 90,\n" +
-        "         \"minage\" : 18,\n" +
+        "         \"minage\" : 18,\n" + 
+        "         \"ownermail\" : \"JosepCastanyes@gmail.com\",\n" + 
+        "         \"ownerphone\" : 988264432,\n" +
         "         \"pets\" : false,\n" +
         "         \"sex\" : \"MAN\",\n" +
         "         \"smokers\" : false\n" +

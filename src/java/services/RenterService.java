@@ -7,8 +7,7 @@
 package services;
 
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
+
 import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -28,6 +27,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.PropertyException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import org.eclipse.persistence.jaxb.UnmarshallerProperties;
 import javax.xml.bind.Marshaller;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 
@@ -78,11 +81,10 @@ public class RenterService {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRenterwithid(@PathParam("id") int id) throws JAXBException{
+    public Response getRenterwithid(@PathParam("id") int id){
         Renter renter = this.queryRenterwithid(id);
         if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
         return Response.ok().entity(renter).build();
-
     }
     
     public Renter queryRenterwithid(int id){
@@ -160,6 +162,7 @@ public class RenterService {
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
             renter.setRoom(room);
+            room.setRenter(renter);
             return renter;
         }
         else return null;
