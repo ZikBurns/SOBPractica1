@@ -34,7 +34,7 @@ public class DataBaseTest {
         System.out.println("--- Created  " + renter);
         
         em.getTransaction().begin();
-        Room room = roomservice.createRoomandRequirements("Habitació tranquila a les afores de sant pere i sant pau", "Carrer Gall d'hindi Nº3", "Tarragona", TypeDimension.SIMPLE, TypeLocation.INTERIOR, true, 90.67, TypeSex.UNISEX, 18, 70, false, false);
+        Room room = roomservice.createRoomandRequirements("Habitació tranquila a les afores de sant pere i sant pau", "Carrer Gall d'hindi Nº3", "Tarragona", TypeDimension.SIMPLE, TypeLocation.INTERIOR, true, 90.67,"txell@gmail.com",987734132, TypeSex.UNISEX, 18, 70, false, false);
         em.getTransaction().commit();
         System.out.println("--- Created  " + room);
         

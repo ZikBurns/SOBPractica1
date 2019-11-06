@@ -6,6 +6,7 @@
 package services;
 
 import java.io.StringReader;
+
 import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -29,6 +30,9 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.jaxb.UnmarshallerProperties;
+import javax.xml.bind.Marshaller;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+
 
 @Path("/tenant")
 public class RenterService {
@@ -131,7 +135,9 @@ public class RenterService {
     public Renter deleteRenterDB(int id){
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
+            em.getTransaction().begin();
             em.remove(renter);
+            em.getTransaction().commit();
             return renter;
         }
         else return null;

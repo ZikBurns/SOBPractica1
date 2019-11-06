@@ -21,7 +21,6 @@ import javax.xml.bind.Marshaller;
 import model.Renter;
 import model.Room;
 import model.TypeSex;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
 
 /**
  *
@@ -29,7 +28,7 @@ import org.eclipse.persistence.jaxb.MarshallerProperties;
  */
 public class UserClient {
     private final WebTarget webTarget;
-    private Client client;
+    private final Client client;
     private static final String BASE_URI = "http://localhost:8080/rest/api/v1";
 
     public UserClient() {

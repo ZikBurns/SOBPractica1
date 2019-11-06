@@ -35,7 +35,7 @@ public class RoomService {
     
     public Room createRoomandRequirements(String description, String address, String city, 
                             TypeDimension dimension, TypeLocation location, 
-                            boolean furniture, double price,TypeSex sex,
+                            boolean furniture, double price,String ownermail,int ownerphone,TypeSex sex,
                             int maxage,int minage,boolean smokers, boolean pets){
         Room room = new Room();
         room.setDescription(description);
@@ -51,6 +51,8 @@ public class RoomService {
         req.setSmokers(smokers);
         req.setMaxage(maxage);
         req.setMinage(minage);
+        req.setOwnermail(ownermail);
+        req.setOwnerphone(ownerphone);
         room.setReq(req);
         em.persist(room);
         return room;
