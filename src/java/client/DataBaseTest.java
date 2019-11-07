@@ -28,14 +28,10 @@ public class DataBaseTest {
         RoomService roomservice=new RoomService(em);
         RenterService renterservice = new RenterService(em);
         
-        em.getTransaction().begin();
         Renter renter = renterservice.createRenter("Norberta", "12345", TypeSex.UNISEX,48, false, false);
-        em.getTransaction().commit();
         System.out.println("--- Created  " + renter);
         
-        em.getTransaction().begin();
         Room room = roomservice.createRoomandRequirements("Habitació tranquila a les afores de sant pere i sant pau", "Carrer Gall d'hindi Nº3", "Tarragona", TypeDimension.SIMPLE, TypeLocation.INTERIOR, true, 90.67,"txell@gmail.com",987734132, TypeSex.UNISEX, 18, 70, false, false);
-        em.getTransaction().commit();
         System.out.println("--- Created  " + room);
         
         /*INSERT QUERIES, DELETES AND UPDATES FOR ROOMS*/
@@ -49,6 +45,8 @@ public class DataBaseTest {
         System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
         System.out.println("--- Delete id=1 \n"+renterservice.deleteRenterDB(1));
         System.out.println("--- Ask for id=1 \n"+renterservice.queryRenterwithid(1));
+        System.out.println("--- General query\n"+renterservice.queryAllRenters());
+
         em.close();
         emf.close();
     }

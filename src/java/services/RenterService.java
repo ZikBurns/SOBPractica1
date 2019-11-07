@@ -177,20 +177,40 @@ public class RenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postRenterRoom(@PathParam("id") int id, Room room) 
     {
-        Renter renter=this.assignRoomToRenter(id,room);
+        Renter renter=queryRenterwithid(id);
+        //If Renter does not exist
         if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
+        Room roomindb = em.find(Room.class, room.getId());
+        //If renter exists, room exists but has a renter
+        if(renter.getRoom()!=null) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already has a room").build();
+        //If renter exists, room exists and has no renter
+        //TODO This one is not working
+        if((roomindb!=null)&&(roomindb.getRenter()==null)){
+            em.getTransaction().begin();
+            renter.setRoom(roomindb);
+            roomindb.setRenter(renter);
+            em.getTransaction().commit();
+        }
+        //If renter exists but room doesn't
+        else if((roomindb==null)){
+            em.getTransaction().begin();
+            renter.setRoom(room);
+            room.setRenter(renter);
+            em.persist(room);
+            em.getTransaction().commit();
+        }
         return Response.ok().entity(renter).build();
     }
     
     public Renter assignRoomToRenter(int id,Room room)
     {
-        EntityTransaction tx = em.getTransaction();  
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
-            tx.begin();
+            em.getTransaction().begin();
             renter.setRoom(room);
-            //room.setRenter(renter);
-            tx.commit();
+            room.setRenter(renter);
+            em.persist(room);
+            em.getTransaction().commit();
             return renter;
         }
         else return null;

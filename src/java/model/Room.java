@@ -29,7 +29,7 @@ public class Room implements Serializable {
     @Embedded 
     private Requeriments req;
 
-    @OneToOne(mappedBy="room")
+    @OneToOne(mappedBy="room", cascade = CascadeType.PERSIST)
     private Renter renter;
     
     public Room(int id, String description, String address, String city, TypeDimension dimension, TypeLocation location, boolean furniture, double price, Requeriments req) {
