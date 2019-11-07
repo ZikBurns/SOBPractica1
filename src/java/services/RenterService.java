@@ -7,11 +7,13 @@
 package services;
 
 import java.io.StringReader;
+import java.net.URI;
 
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.ws.rs.Consumes;
@@ -27,8 +29,11 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.PropertyException;
@@ -56,26 +61,30 @@ public class RenterService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response postRenter(Renter renter) 
+    public Response postRenter(Renter renter, @Context UriInfo uriInfo) 
     {
         //List<Renter> renters = this.queryAllRenters();
         //if(renters.getx) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
-        renter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
-        return Response.ok().entity(renter).build();
+        Renter newrenter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(Integer.toString(renter.getId()));
+        return Response.created(builder.build()).entity(newrenter).build();
     }
     
      public Renter createRenter(String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
-        List<Renter> list = queryAllRenters();
-        Renter last = list.get(list.size()-1);
+        //List<Renter> list = queryAllRenters();
+        //Renter last = list.get(list.size()-1);
         Renter renter = new Renter();
-        renter.setId(last.getId()+1);
+        //renter.setId(last.getId()+1);
         renter.setUsername(user);
         renter.setPassword(pass);
         renter.setSex(sex);
         renter.setAge(age);
         renter.setSmoker(smoker);
         renter.setHaspets(haspets);
+        em.getTransaction().begin();
         em.persist(renter);
+        em.getTransaction().commit();
         return renter;
     }
     
@@ -120,19 +129,21 @@ public class RenterService {
     public Response putUpdateRenter(@PathParam("id") int id, Renter renter)
     {
         renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
-        if (renter==null) return Response.noContent().build();
+        if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
         else return Response.ok().entity(renter).build();
     }
     
     public Renter updateRenter(int id,String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
+            em.getTransaction().begin();
             renter.setUsername(user);
             renter.setPassword(pass);
             renter.setSex(sex);
             renter.setAge(age);
             renter.setSmoker(smoker);
             renter.setHaspets(haspets);
+            em.getTransaction().commit();
             return renter;
         }
         else return null;
@@ -168,15 +179,18 @@ public class RenterService {
     {
         Renter renter=this.assignRoomToRenter(id,room);
         if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
-        else return Response.ok().entity(renter).build();
+        return Response.ok().entity(renter).build();
     }
     
     public Renter assignRoomToRenter(int id,Room room)
     {
+        EntityTransaction tx = em.getTransaction();  
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
+            tx.begin();
             renter.setRoom(room);
-            room.setRenter(renter);
+            //room.setRenter(renter);
+            tx.commit();
             return renter;
         }
         else return null;
