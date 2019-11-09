@@ -7,15 +7,49 @@ package services;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import model.*;
 
-@Path("/books")
+@Path("/book")
 public class RoomService {
     protected EntityManager em;
     
     public RoomService(EntityManager em){
         this.em=em;
+    }
+    public RoomService() {
+        em = Persistence.createEntityManagerFactory("Service")
+                        .createEntityManager();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postRoom(Room room, @Context UriInfo uriInfo) 
+    {
+        Room newroom=this.createRoomandRequirements(room.getDescription(), room.getAddress(), room.getCity(), room.getDimension(), room.getLocation(), room.isFurniture(),room.getPrice(),room.getReq());
+        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+        builder.path(Integer.toString(newroom.getId()));
+        return Response.created(builder.build()).entity(newroom).build();
+    }
+    public Room createRoom(Room room){
+        em.getTransaction().begin();
+        em.persist(room);
+        em.getTransaction().commit();
+        return room;
     }
     
     public Room createRoom(String description, String address, String city, 
@@ -29,7 +63,9 @@ public class RoomService {
         room.setLocation(location);
         room.setFurniture(furniture);
         room.setPrice(price);
+        em.getTransaction().begin();
         em.persist(room);
+        em.getTransaction().commit();
         return room;
     }
     
@@ -54,30 +90,102 @@ public class RoomService {
         req.setOwnermail(ownermail);
         req.setOwnerphone(ownerphone);
         room.setReq(req);
+        em.getTransaction().begin();
         em.persist(room);
+        em.getTransaction().commit();
+        return room;
+    }
+    public Room createRoomandRequirements(String description, String address, String city, 
+                            TypeDimension dimension, TypeLocation location, 
+                            boolean furniture, double price,Requeriments req){
+        Room room = new Room();
+        room.setDescription(description);
+        room.setAddress(address);
+        room.setCity(city);
+        room.setDimension(dimension);
+        room.setLocation(location);
+        room.setFurniture(furniture);
+        room.setPrice(price);
+        room.setReq(req);
+        em.getTransaction().begin();
+        em.persist(room);
+        em.getTransaction().commit();
         return room;
     }
     
-    //GET /rest/api/v1/room/${id}
-    //Retorna la informació de l'habitació amb identificador ${id}.
-        public Room queryIDtoInfo(int id) {
-        String query = "SELECT * " +
-                       "FROM Room e " +
-                       "WHERE e.id = '" + id + "'";
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRoomwithid(@PathParam("id") int id){
+        Room room = this.queryRoomwithid(id);
+        if (room==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
+        return Response.ok().entity(room).build();
+    }
+    
+    public Room queryRoomwithid(int id){
+        String query="SELECT r FROM Room r WHERE r.id = :id";
         try {
-            return (Room) em.createQuery(query).getSingleResult();
+        return (Room) em.createQuery(query)
+                        .setParameter("id", id)
+                        .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
     }
     
-    
-    public void removeRoom(Room id) {
-        em.createQuery("Delete Room e " +
-                       "WHERE e.id = :id ")
-          .setParameter("id", id)
-          .executeUpdate();
+    @DELETE    
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteRoom(@PathParam("id") int id)
+    {
+        Room room =this.deleteRoomDB(id);
+        if (room==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
+        else return Response.ok().entity(room).build();
     }
+    
+    public Room deleteRoomDB(int id){
+        Room room=queryRoomwithid(id);
+        if(room!=null){
+            em.getTransaction().begin();
+            em.remove(room);
+            em.getTransaction().commit();
+            return room;
+        }
+        else return null;
+    }
+    
+    @PUT    
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putUpdateRoom(@PathParam("id") int id, Room room)
+    {
+        room=this.updateRoom(id,room.getDescription(), room.getAddress(), room.getCity(), room.getDimension(), room.getLocation(), room.isFurniture(),room.getPrice(),room.getReq());
+        if (room==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
+        else return Response.ok().entity(room).build();
+    }
+    
+    public Room updateRoom(int id,String description, String address, String city, 
+                            TypeDimension dimension, TypeLocation location, 
+                            boolean furniture, double price,Requeriments req){
+        Room room=queryRoomwithid(id);
+        if(room!=null){
+            em.getTransaction().begin();
+            room.setDescription(description);
+            room.setAddress(address);
+            room.setCity(city);
+            room.setDimension(dimension);
+            room.setLocation(location);
+            room.setFurniture(furniture);
+            room.setPrice(price);
+            room.setReq(req);
+            em.getTransaction().commit();
+            return room;
+        }
+        else return null;
+        
+    }
+    
     
     public long queryEmpSalary(String deptName, String empName) {
         String query = "SELECT e.salary " +

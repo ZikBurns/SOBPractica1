@@ -26,7 +26,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -34,14 +33,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.PropertyException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
-import org.eclipse.persistence.jaxb.UnmarshallerProperties;
-import javax.xml.bind.Marshaller;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
+
 
 
 @Path("/tenant")
@@ -67,15 +59,12 @@ public class RenterService {
         //if(renters.getx) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
         Renter newrenter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        builder.path(Integer.toString(renter.getId()));
+        builder.path(Integer.toString(newrenter.getId()));
         return Response.created(builder.build()).entity(newrenter).build();
     }
     
      public Renter createRenter(String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
-        //List<Renter> list = queryAllRenters();
-        //Renter last = list.get(list.size()-1);
         Renter renter = new Renter();
-        //renter.setId(last.getId()+1);
         renter.setUsername(user);
         renter.setPassword(pass);
         renter.setSex(sex);
@@ -121,7 +110,6 @@ public class RenterService {
         }
     }
     
-    /*TODO UpdateRenter as a PUT*/
     @PUT    
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
