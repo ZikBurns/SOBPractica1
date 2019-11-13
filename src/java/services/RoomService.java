@@ -5,6 +5,7 @@
  */
 package services;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
@@ -17,13 +18,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import model.*;
 
-@Path("/book")
+@Path("/room")
 public class RoomService {
     protected EntityManager em;
     
@@ -113,6 +115,9 @@ public class RoomService {
         return room;
     }
     
+    
+
+    
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -186,20 +191,42 @@ public class RoomService {
         
     }
     
-    
-    public long queryEmpSalary(String deptName, String empName) {
-        String query = "SELECT e.salary " +
-                       "FROM Employee e " +
-                       "WHERE e.department.name = '" + deptName + "' AND " +
-                       "      e.name = '" + empName + "'";
-        try {
-            return (Long) em.createQuery(query).getSingleResult();
-        } catch (NoResultException e) {
-            return 0;
-        }
+    @GET
+    @Path("location=${city}&sort=${criterion}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrdered(@PathParam("city") String city,@PathParam("criterion") String criterion){
+        List<Room> list = null;
+        if ( !criterion.equals("asc") || !criterion.equals("asc")) return Response.status(Response.Status.NOT_FOUND).entity("criterion must be <asc> or <desc>").build();
+        
+        list= queryRoomsfromCity(city,criterion);
+        if(list.isEmpty()) return Response.noContent().build();
+        GenericEntity<List<Room>> entity= new GenericEntity<List<Room>>(list){};
+        return Response.ok(entity).build();
+    }
+    @GET
+    @Path("sort=${criterion}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrdered(@PathParam("criterion") String criterion){
+        List<Room> list = null;
+        if ( !criterion.equals("asc") || !criterion.equals("asc")) return Response.status(Response.Status.NOT_FOUND).entity("criterion must be <asc> or <desc>").build();
+        
+        list = queryAllRooms(criterion);
+        if(list.isEmpty()) return Response.noContent().build();
+        GenericEntity<List<Room>> entity= new GenericEntity<List<Room>>(list){};
+        return Response.ok(entity).build();
     }
     
+    public List<Room> queryAllRooms(String criterion) {
+                 return (List<Room>) em.createQuery("SELECT r FROM Room r ORDER BY r.price "+criterion,Room.class).getResultList();
 
+    }
+    
+    public List<Room> queryRoomsfromCity(String city,String criterion){
+        
+         return (List<Room>) em.createQuery("SELECT r FROM Room r "+" WHERE r.city = '" + city + "'"+" ORDER BY r.price "+criterion,Room.class).getResultList();
+    }
+        
+    
     
     
 }
