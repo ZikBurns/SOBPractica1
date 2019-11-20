@@ -152,7 +152,11 @@ public class RoomService {
         Room room=queryRoomwithid(id);
         if((room!=null)&&(room.getRenter()==null)){
             em.getTransaction().begin();
-            if(room.getRenter()!=null )em.remove(room.getRenter());
+            if(room.getRenter()!=null )
+            {
+                room.getRenter().setRoom(null);
+                room.setRenter(null);
+            }
             em.remove(room);
             em.getTransaction().commit();
             return room;

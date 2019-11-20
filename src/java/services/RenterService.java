@@ -146,7 +146,10 @@ public class RenterService {
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
             em.getTransaction().begin();
-            if(renter.getRoom()!=null )em.remove(renter.getRoom());
+            if(renter.getRoom()!=null ){
+                renter.getRoom().setRenter(null);
+                renter.setRoom(null);
+            }
             em.remove(renter);
             em.getTransaction().commit();
             return renter;
