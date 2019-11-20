@@ -6,6 +6,7 @@
  */
 package services;
 
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -49,12 +50,22 @@ public class RenterService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postRenter(Renter renter, @Context UriInfo uriInfo) 
     {
-        //List<Renter> renters = this.queryAllRenters();
-        //if(renters.getx) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already exists").build();
+        if (UserNameExists(renter.getUsername())) return Response.status(Response.Status.CONFLICT).entity("Renter with username: " + renter.getUsername()+" already exists").build();
         Renter newrenter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(Integer.toString(newrenter.getId()));
         return Response.created(builder.build()).entity(newrenter).build();
+    }
+    
+    public boolean UserNameExists(String username)
+    {
+        List<Renter> renters = this.queryAllRenters();
+        int i=0;
+        while(i<renters.size()&&(!renters.get(i).getUsername().equals(username))){
+            i++;
+        }
+        if (i==renters.size()) return false;
+        else return true;
     }
     
      public Renter createRenter(String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
