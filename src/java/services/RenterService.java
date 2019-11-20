@@ -46,8 +46,8 @@ public class RenterService {
     }
     
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response postRenter(Renter renter, @Context UriInfo uriInfo) 
     {
         if (UserNameExists(renter.getUsername())) return Response.status(Response.Status.CONFLICT).entity("Renter with username: " + renter.getUsername()+" already exists").build();
@@ -84,7 +84,7 @@ public class RenterService {
     
      
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getjsonAllRenters(){
         GenericEntity<List<Renter>> entity = new GenericEntity<List<Renter>>(queryAllRenters()) {};
          return Response.ok(entity).build();
@@ -97,7 +97,7 @@ public class RenterService {
     
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getRenterwithid(@PathParam("id") int id){
         Renter renter = this.queryRenterwithid(id);
         if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
@@ -117,8 +117,8 @@ public class RenterService {
     
     @PUT    
     @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response putUpdateRenter(@PathParam("id") int id, Renter renter)
     {
         renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
@@ -145,7 +145,7 @@ public class RenterService {
     
     @DELETE    
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response deleteRenter(@PathParam("id") int id)
     {
         Renter renter =this.deleteRenterDB(id);
@@ -170,8 +170,8 @@ public class RenterService {
     
     @POST
     @Path("{id}/rent")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response postRenterRoom(@PathParam("id") int id, Room room) 
     {
         Renter renter=queryRenterwithid(id);

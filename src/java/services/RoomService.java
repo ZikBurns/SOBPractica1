@@ -38,8 +38,8 @@ public class RoomService {
     }
     
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response postRoom(Room room, @Context UriInfo uriInfo) 
     {
         Room newroom=this.createRoomandRequirements(room.getDescription(), room.getAddress(), room.getCity(), room.getDimension(), room.getLocation(), room.isFurniture(),room.getPrice(),room.getReq());
@@ -120,7 +120,7 @@ public class RoomService {
     
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getRoomwithid(@PathParam("id") int id){
         Room room = this.queryRoomwithid(id);
         if (room==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
@@ -140,7 +140,7 @@ public class RoomService {
     
     @DELETE    
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response deleteRoom(@PathParam("id") int id)
     {
         Room room =this.deleteRoomDB(id);
@@ -166,8 +166,8 @@ public class RoomService {
     
     @PUT    
     @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response putUpdateRoom(@PathParam("id") int id, Room room)
     {
         room=this.updateRoom(id,room.getDescription(), room.getAddress(), room.getCity(), room.getDimension(), room.getLocation(), room.isFurniture(),room.getPrice(),room.getReq());
@@ -198,7 +198,7 @@ public class RoomService {
     
     @GET
     @Path("location=${city}&sort=${criterion}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getOrdered(@PathParam("city") String city,@PathParam("criterion") String criterion){
         List<Room> list = null;
         if ( !criterion.equals("asc") || !criterion.equals("asc")) return Response.status(Response.Status.NOT_FOUND).entity("criterion must be <asc> or <desc>").build();
@@ -210,7 +210,7 @@ public class RoomService {
     }
     @GET
     @Path("sort=${criterion}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getOrdered(@PathParam("criterion") String criterion){
         List<Room> list = null;
         if ( !criterion.equals("asc") || !criterion.equals("asc")) return Response.status(Response.Status.NOT_FOUND).entity("criterion must be <asc> or <desc>").build();
