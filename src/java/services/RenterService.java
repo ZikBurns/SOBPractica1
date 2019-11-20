@@ -146,6 +146,7 @@ public class RenterService {
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
             em.getTransaction().begin();
+            if(renter.getRoom()!=null )em.remove(renter.getRoom());
             em.remove(renter);
             em.getTransaction().commit();
             return renter;
@@ -166,7 +167,6 @@ public class RenterService {
         //If renter exists, room exists but has a renter
         if(renter.getRoom()!=null) return Response.status(Response.Status.CONFLICT).entity("Entity with ID: " + renter.getId()+" already has a room").build();
         //If renter exists, room exists and has no renter
-        //TODO This one is not working
         if((roomindb!=null)&&(roomindb.getRenter()==null)){
             em.getTransaction().begin();
             renter.setRoom(roomindb);

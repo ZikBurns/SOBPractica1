@@ -150,8 +150,9 @@ public class RoomService {
     
     public Room deleteRoomDB(int id){
         Room room=queryRoomwithid(id);
-        if(room!=null){
+        if((room!=null)&&(room.getRenter()==null)){
             em.getTransaction().begin();
+            if(room.getRenter()!=null )em.remove(room.getRenter());
             em.remove(room);
             em.getTransaction().commit();
             return room;
