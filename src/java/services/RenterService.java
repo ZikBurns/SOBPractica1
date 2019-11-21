@@ -6,7 +6,6 @@
  */
 package services;
 
-import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -51,7 +50,7 @@ public class RenterService {
     public Response postRenter(Renter renter, @Context UriInfo uriInfo) 
     {
         if (UserNameExists(renter.getUsername())) return Response.status(Response.Status.CONFLICT).entity("Renter with username: " + renter.getUsername()+" already exists").build();
-        Renter newrenter=this.createRenter(renter.getUsername(), renter.getPassword(), renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
+        Renter newrenter=this.createRenter(renter.getUsername(),  renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(Integer.toString(newrenter.getId()));
         return Response.created(builder.build()).entity(newrenter).build();
@@ -68,10 +67,9 @@ public class RenterService {
         else return true;
     }
     
-     public Renter createRenter(String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
+     public Renter createRenter(String user,TypeSex sex,int age, boolean smoker,boolean haspets){
         Renter renter = new Renter();
         renter.setUsername(user);
-        renter.setPassword(pass);
         renter.setSex(sex);
         renter.setAge(age);
         renter.setSmoker(smoker);
@@ -121,17 +119,16 @@ public class RenterService {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response putUpdateRenter(@PathParam("id") int id, Renter renter)
     {
-        renter=this.updateRenter(id,renter.getUsername(),renter.getPassword(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
+        renter=this.updateRenter(id,renter.getUsername(),renter.getSex(),renter.getAge(),renter.isSmoker(),renter.isHaspets());
         if (renter==null) return Response.status(Response.Status.NOT_FOUND).entity("Entity not found for ID: " + id).build();
         else return Response.ok().entity(renter).build();
     }
     
-    public Renter updateRenter(int id,String user,String pass,TypeSex sex,int age, boolean smoker,boolean haspets){
+    public Renter updateRenter(int id,String user,TypeSex sex,int age, boolean smoker,boolean haspets){
         Renter renter=queryRenterwithid(id);
         if(renter!=null){
             em.getTransaction().begin();
             renter.setUsername(user);
-            renter.setPassword(pass);
             renter.setSex(sex);
             renter.setAge(age);
             renter.setSmoker(smoker);

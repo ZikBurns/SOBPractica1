@@ -20,7 +20,7 @@ public class XmlJsonTest {
     public static void main(String[] args) throws JAXBException{
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
         Room room = new Room(123,"Casa bonica","Sant Antoni N7","Barcelona",TypeDimension.SIMPLE,TypeLocation.INTERIOR,true, 13.22,new Requeriments("JosepCastanyes@gmail.com",988264432,TypeSex.MAN,90,18,false, false));
-        Renter renter = new Renter (1245,"mine","craft",TypeSex.WOMAN,20,true,false);
+        Renter renter = new Renter (1245,"mine",TypeSex.WOMAN,20,true,false);
         System.out.println("The system has\n"+room+"\n"+renter);
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Rent the room? (y/n)");
@@ -130,7 +130,6 @@ public class XmlJsonTest {
             "   \"renter\" : {\n" +
             "      \"id\" : 1245,\n" +
             "      \"username\" : \"mine\",\n" +
-            "      \"password\" : \"craft\",\n" +
             "      \"sex\" : \"WOMAN\",\n" +
             "      \"age\" : 20,\n" +
             "      \"smoker\" : true,\n" +
@@ -163,7 +162,6 @@ public class XmlJsonTest {
             "   \"renter\" : {\n" +
             "      \"id\" : 1245,\n" +
             "      \"username\" : \"mine\",\n" +
-            "      \"password\" : \"craft\",\n" +
             "      \"sex\" : \"WOMAN\",\n" +
             "      \"age\" : 20,\n" +
             "      \"smoker\" : true,\n" +

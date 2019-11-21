@@ -16,13 +16,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
-@XmlType(propOrder = {"id","username","password","sex","age","smoker","haspets","room"})
+@XmlType(propOrder = {"id","username","sex","age","smoker","haspets","room"})
 @Entity
 public class Renter implements Serializable {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private String username;
-    private String password;
     private TypeSex sex;
     private int age;
     private boolean smoker;
@@ -36,10 +35,9 @@ public class Renter implements Serializable {
     public Renter() {
     }
 
-    public Renter(int id, String username, String password, TypeSex sex, int age, boolean smoker, boolean haspets) {
+    public Renter(int id, String username, TypeSex sex, int age, boolean smoker, boolean haspets) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.sex = sex;
         this.age = age;
         this.smoker = smoker;
@@ -65,13 +63,6 @@ public class Renter implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     
     
@@ -117,8 +108,8 @@ public class Renter implements Serializable {
 
     @Override
     public String toString() {
-        if(room==null) return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
-        else return "Renter{" + "id=" + id + ", username=" + username + ", password=" + password + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
+        if(room==null) return "Renter{" + "id=" + id + ", username=" + username + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + '}';
+        else return "Renter{" + "id=" + id + ", username=" + username + ", sex=" + sex + ", age=" + age + ", smoker=" + smoker + ", haspets=" + haspets + ", room=" + room + '}';
     }
 
    

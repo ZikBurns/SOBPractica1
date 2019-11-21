@@ -108,11 +108,11 @@ public class UserClient {
         response = client.getRenter(2);
         System.out.println("Response get: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
-        Renter renter=new Renter(10,"josepmaria","catorze",TypeSex.MAN,46,true,true);
+        Renter renter=new Renter(10,"josepmaria",TypeSex.MAN,46,true,true);
         response = client.postRenter(renter);
         System.out.println("Response post: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
-        renter=new Renter(10,"josepmaria","quinze",TypeSex.MAN,46,true,true);
+        renter=new Renter(10,"josepmaria",TypeSex.MAN,46,true,true);
         response = client.putUpdateRenter(renter);
         System.out.println("Response update: \n" + response.readEntity(Renter.class) + "\n  Status: " + response.getStatus());
         
