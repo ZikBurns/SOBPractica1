@@ -45,7 +45,8 @@ public class UserPassService implements ContainerRequestFilter {
         em.getTransaction().commit();
         return userpass;
     }
-    public UserPass createUserPass(UserPass userpass){
+    public UserPass createUserPassWithCripto(String user, String pass){
+        UserPass userpass = new UserPass(user,sha256(pass));
         em.getTransaction().begin();
         em.persist(userpass);
         em.getTransaction().commit();
@@ -72,9 +73,23 @@ public class UserPassService implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String user = requestContext.getHeaderString(X_USER);
         String pass = requestContext.getHeaderString(X_PASSWORD);
+        if(!UserExists(user)) this.createUserPassWithCripto(user,pass);
         if(!validUserPass(user,pass)) requestContext.abortWith( Response.status( Response.Status.UNAUTHORIZED ).build() );
-    
     }
+    
+    public boolean UserExists(String user)
+    {
+        List<UserPass> list=this.queryAllUserPass();
+        int i=0;
+        UserPass userpass=list.get(i);
+        while(i<list.size() && (!userpass.getUser().equals(user)))
+        {
+            userpass=list.get(i);
+            i++;
+        }
+        return userpass.getUser().equals(user);
+    }
+    
     public boolean validUserPass(String user,String pass){
         List<UserPass> list=this.queryAllUserPass();
         int i=0;
