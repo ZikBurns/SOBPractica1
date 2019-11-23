@@ -14,10 +14,11 @@ import model.Room;
 import model.TypeDimension;
 import model.TypeLocation;
 import model.TypeSex;
-import model.UserPass;
+import model.Credentials;
 import services.RenterService;
 import services.RoomService;
-import services.UserPassService;
+import services.CredentialsFilter;
+import services.CredentialsService;
 
 /**
  *
@@ -30,14 +31,14 @@ public class DataBaseTest {
         EntityManager em = emf.createEntityManager();
         RoomService roomservice=new RoomService(em);
         RenterService renterservice = new RenterService(em);
-        UserPassService userpassservice = new UserPassService(em);
+        CredentialsService userpassservice = new CredentialsService(em);
         Renter renter = renterservice.createRenter("Norberta", TypeSex.UNISEX,48, false, false);
         System.out.println("--- Created  " + renter);
         
         Room room = roomservice.createRoomandRequirements("Habitació tranquila a les afores de sant pere i sant pau", "Carrer Gall d'hindi Nº3", "Sant Salvador", TypeDimension.SIMPLE, TypeLocation.INTERIOR, true, 90.67,"txell@gmail.com",987734132, TypeSex.UNISEX, 18, 70, false, false);
         System.out.println("--- Created  " + room);
         
-        UserPass userpass = userpassservice.createUserPass("Joan","hola");
+        Credentials userpass = userpassservice.createCredentials("Joan","hola");
         System.out.println("--- Created  " + userpass);
         
         System.out.println("\n-----   ROOM TESTS   -----\n");
@@ -61,12 +62,12 @@ public class DataBaseTest {
         System.out.println("--- General query\n"+renterservice.queryAllRenters());
 
         System.out.println("\n-----   ROOM TESTS   -----\n");
-        System.out.println("--- General query\n"+userpassservice.queryAllUserPass());
-        System.out.println("--- Ask for user=Ana \n"+userpassservice.queryUserPasswithid("Ana"));
-        System.out.println("--- Ask for user=admin \n"+userpassservice.queryUserPasswithid("admin"));
-        System.out.println("--- Ask for password user=admin \n"+userpassservice.queryUserPasswithid("admin").getPass());
-        System.out.println("--- Ask for password user=sob \n"+userpassservice.queryUserPasswithid("sob").getPass());
-        System.out.println("--- Ask for password user=Ana \n"+userpassservice.queryUserPasswithid("Ana").getPass());
+        System.out.println("--- General query\n"+userpassservice.queryAllCredentials());
+        System.out.println("--- Ask for user=Ana \n"+userpassservice.queryCredentialswithid("Ana"));
+        System.out.println("--- Ask for user=admin \n"+userpassservice.queryCredentialswithid("admin"));
+        System.out.println("--- Ask for password user=admin \n"+userpassservice.queryCredentialswithid("admin").getPassword());
+        System.out.println("--- Ask for password user=sob \n"+userpassservice.queryCredentialswithid("sob").getPassword());
+        System.out.println("--- Ask for password user=Ana \n"+userpassservice.queryCredentialswithid("Ana").getPassword());
 
 
         em.close();

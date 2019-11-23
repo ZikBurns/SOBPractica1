@@ -6,6 +6,7 @@
  */
 package services;
 
+import java.security.MessageDigest;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,6 +28,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import model.Credentials;
 
 
 
@@ -47,16 +49,14 @@ public class RenterService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response postRenter(Renter renter, @Context UriInfo uriInfo) 
+    public Response postRenter(Renter renter) 
     {
-        if (UserNameExists(renter.getUsername())) return Response.status(Response.Status.CONFLICT).entity("Renter with username: " + renter.getUsername()+" already exists").build();
+        if (UserNameExistsRenter(renter.getUsername())) return Response.status(Response.Status.CONFLICT).entity("Renter with username: " + renter.getUsername()+" already exists").build();
         Renter newrenter=this.createRenter(renter.getUsername(),  renter.getSex(), renter.getAge(), renter.isSmoker(), renter.isHaspets());
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        builder.path(Integer.toString(newrenter.getId()));
-        return Response.created(builder.build()).entity(newrenter).build();
+        return Response.status(Response.Status.CREATED).entity(newrenter).build();
     }
     
-    public boolean UserNameExists(String username)
+        public boolean UserNameExistsRenter(String username)
     {
         List<Renter> renters = this.queryAllRenters();
         int i=0;
@@ -67,6 +67,9 @@ public class RenterService {
         else return true;
     }
     
+    
+
+
      public Renter createRenter(String user,TypeSex sex,int age, boolean smoker,boolean haspets){
         Renter renter = new Renter();
         renter.setUsername(user);

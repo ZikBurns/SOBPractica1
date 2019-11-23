@@ -7,7 +7,7 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>model.Room</class>
     <class>model.Renter</class>
-    <class>model.UserPass</class>
+    <class>model.Credentials</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/APP"/>
       <property name="javax.persistence.jdbc.user" value="APP"/>

@@ -21,7 +21,8 @@ public class XmlJsonTest {
         System.setProperty("javax.xml.bind.context.factory","org.eclipse.persistence.jaxb.JAXBContextFactory");
         Room room = new Room(123,"Casa bonica","Sant Antoni N7","Barcelona",TypeDimension.SIMPLE,TypeLocation.INTERIOR,true, 13.22,new Requeriments("JosepCastanyes@gmail.com",988264432,TypeSex.MAN,90,18,false, false));
         Renter renter = new Renter (1245,"mine",TypeSex.WOMAN,20,true,false);
-        System.out.println("The system has\n"+room+"\n"+renter);
+        Credentials userpass = new Credentials("mine","craft");
+        System.out.println("The system has\n"+room+"\n"+renter+"/n"+userpass);
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Rent the room? (y/n)");
         String response = keyboard.next();
@@ -173,6 +174,26 @@ public class XmlJsonTest {
         // Getting the employee pojo again from the json
         renter = unmarshaller.unmarshal(json, Renter.class).getValue();
         System.out.println(renter);
+        
+        System.out.println("\n---- USERPASS XML MARSHALLING TEST ----\n");
+        file = new File("userpass.xml");
+        jaxbContext = JAXBContext.newInstance(Credentials.class);
+        jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        jaxbMarshaller.marshal(userpass, file);
+        jaxbMarshaller.marshal(userpass, System.out);
+
+        
+        System.out.println("\n---- USERPASS JSON MARSHALLING TEST ----\n");
+        jc = JAXBContext.newInstance(Credentials.class);
+        marshaller = jc.createMarshaller();
+        // Set the Marshaller media type to JSON or XML
+        marshaller.setProperty(MarshallerProperties.MEDIA_TYPE,"application/json");
+        marshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, true);
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        sw = new StringWriter();
+        marshaller.marshal(userpass, sw);
+        System.out.println(sw.toString()); 
         
     }
 }
